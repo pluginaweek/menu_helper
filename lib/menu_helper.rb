@@ -41,12 +41,16 @@ module PluginAWeek #:nodoc:
         attr_reader :menus
         
         def initialize(collection, options = {}, html_options = {}) #:nodoc:
+          @html_options = html_options
+          @html_options.set_or_prepend(:class, 'menu_bar')
+          
+          @menus = ActiveSupport::OrderedHash.new
           
           yield self if block_given?
         end
         
         # 
-        def menu(class_name, caption = class_name.to_s.titleize)
+        def menu(name, caption = class_name.to_s.titleize)
           @menus[class_name] = caption
         end
         
