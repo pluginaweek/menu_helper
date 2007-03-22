@@ -14,21 +14,26 @@ module PluginAWeek #:nodoc:
         include ActionView::Helpers::TagHelper
         
         # The collection of options to use in the cell's html
-        attr_reader :html_options
+        attr_reader :menu_bar
         
-        delegate    :[],
-                    :[]=,
-                      :to => :html_options
+        delegate    :menu,
+                      :to => :menu_bar
         
-        def initialize(tag_name, class_name, content = class_name.to_s.titleize, html_options = {}) #:nodoc
+        def initialize(id, name, options = {}, html_options = {}) #:nodoc
           @html_options = html_options.symbolize_keys
-          @html_options.set_or_prepend(:class, class_name.to_s)
+          @html_options.set_or_prepend(:class, name.to_s)
           
-          @tag_name, @content = tag_name, content
+          @menu_bar = MenuBar.new
+          @name = name
+          
+          if options.blank?
+            if 
+          end
         end
         
         # 
         def build
+          sub_menu_bar = @menu_bar.build
           content_tag(@tag_name, @content, @html_options)
         end
       end
@@ -50,8 +55,8 @@ module PluginAWeek #:nodoc:
         end
         
         # 
-        def menu(name, caption = class_name.to_s.titleize)
-          @menus[class_name] = caption
+        def menu(id, *args)
+          @menus[id.to_sym] = Menu.new(id, *args)
         end
         
         # 
@@ -66,3 +71,5 @@ end
 ActionController::Base.class_eval do
   helper PluginAWeek::Helpers::MenuHelper
 end
+
+ActionController::Routing::Routes.named_routes.install(PluginAWeek::Helpers::MenuHelper::Menu)
