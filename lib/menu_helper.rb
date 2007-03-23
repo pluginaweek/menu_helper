@@ -5,36 +5,96 @@ module PluginAWeek #:nodoc:
     # 
     module MenuHelper
       # 
-      def menu_bar(options = {}, html_options = {}, &block)
-        MenuBar.new(options, html_options, &block)
+      def menu_bar(*args, &block)
+        MainMenuBar.new(self, *args, &block)
       end
       
       # 
       class Menu
         include ActionView::Helpers::TagHelper
         
-        # The collection of options to use in the cell's html
+        # 
         attr_reader :menu_bar
+        
+        # 
+        attr_reader :id
+        
+        #
+        attr_reader :url
+        
+        # 
+        attr_reader :url_controller
         
         delegate    :menu,
                       :to => :menu_bar
+        delegate    :link_to,
+                    :current_page?,
+                      :to => :request_controller
         
-        def initialize(id, name, options = {}, html_options = {}) #:nodoc
-          @html_options = html_options.symbolize_keys
-          @html_options.set_or_prepend(:class, name.to_s)
+        def initialize(id, request_controller, parent = nil, *args) #:nodoc
+          @id = id.to_s
+          @request_controller = request_controller
+          @parent = parent
           
-          @menu_bar = MenuBar.new
-          @name = name
+          @content = args.first.is_a?(String) ? args.shift : @id.underscore.titleize
           
-          if options.blank?
-            if 
+          # Build the url for the menu
+          url_options = args.shift || {}
+          if !url_options.include?(:auto_link)
+            @url = build_url(url_options)
+            @content = link_to(@content, @url)
           end
+          
+          # Build the html options
+          @html_options = args.shift || {}
+          @html_options.symbolize_keys!
+          @html_options.set_or_prepend(:class, @id)
+          @html_options.set_or_append(:class, 'selected') if @url && current_page?(@url)
+          
+          @menu_bar = MenuBar.new(controller)
+          
+          yield self if block_given?
         end
         
         # 
-        def build
-          sub_menu_bar = @menu_bar.build
-          content_tag(@tag_name, @content, @html_options)
+        def build(last = false)
+          html = @content + @menu_bar.build
+          html_options = @html_options.dup
+          html_options.set_or_append(:class, 'last') if last
+          
+          content_tag('li', html, html_options)
+        end
+        
+        private
+        def url_for(options = {})
+          if options.empty?
+            url = named_route(name) || named_route(name, parent)
+          end
+          
+          if !url && link_options.is_a?(Hash) && !link_options[:controller && ]Object.const_defined?("#{@id.classify}Controller")
+            options[:controller] = id
+          end
+          
+          url || default_url
+        end
+        
+        def add_parent_options(options)
+          if @parent
+            options[:controller] ||= @parent.url_controller
+          end
+          
+          options
+        end
+        
+        def default_url
+          @parent ? @parent.url : @request_controller.url
+        end
+        
+        def named_route(name, parent)
+          method_name = "#{name}_url"
+          method_name.insert("#{parent.id}_") if parent
+          
+          @request_controller.send(method_name) if @request_controller.respond_to?(method_name)
         end
       end
       
@@ -45,23 +105,50 @@ module PluginAWeek #:nodoc:
         # 
         attr_reader :menus
         
-        def initialize(collection, options = {}, html_options = {}) #:nodoc:
+        # The collection of options to use in the menu bar's html
+        attr_reader :html_options
+        
+        delegate    :[],
+                    :[]=,
+                      :to => :html_options
+        
+        def initialize(request_controller, options = {}, html_options = {}, parent_menu = nil) #:nodoc:
+          options.assert_valid_keys(
+            :auto_set_ids
+          )
+          options.reverse_merge!(
+            :auto_set_ids => true
+          )
+          @options = options
           @html_options = html_options
-          @html_options.set_or_prepend(:class, 'menu_bar')
+          @request_controller = request_controller
+          @parent_menu = parent_menu
           
-          @menus = ActiveSupport::OrderedHash.new
+          @menus = []
           
           yield self if block_given?
         end
         
         # 
-        def menu(id, *args)
-          @menus[id.to_sym] = Menu.new(id, *args)
+        def menu(id, *args, &block)
+          @menus << Menu.new(id, @request_controller, @parent_menu, *args, &block)
         end
         
         # 
         def build
-          html = ''
+          html = @menus.inject('') do |menu, html|
+            html << menu.build(@menus.last == menu)
+          end
+          
+          content_tag('ul', html, @html_options)
+        end
+      end
+      
+      class MainMenuBar < MenuBar
+        def initialize(*args)
+          super(*args)
+          
+          @html_options[:id] ||= 'menu_bar'
         end
       end
     end
