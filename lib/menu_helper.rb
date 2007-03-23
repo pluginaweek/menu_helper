@@ -168,5 +168,3 @@ end
 ActionController::Base.class_eval do
   helper PluginAWeek::Helpers::MenuHelper
 end
-
-ActionController::Routing::Routes.named_routes.install(PluginAWeek::Helpers::MenuHelper::Menu)
