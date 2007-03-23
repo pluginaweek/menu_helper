@@ -23,11 +23,12 @@ module PluginAWeek #:nodoc:
         attr_reader :url
         
         # 
-        attr_reader :url_controller
+        attr_reader :url_controller_path
         
         delegate    :menu,
                       :to => :menu_bar
-        delegate    :link_to,
+        delegate    :url_for,
+                    :link_to
                     :current_page?,
                       :to => :request_controller
         
@@ -66,33 +67,42 @@ module PluginAWeek #:nodoc:
         end
         
         private
-        def url_for(options = {})
-          if options.empty?
-            url = named_route(name) || named_route(name, parent)
+        # 
+        def build_url(options = {})
+          # Check if the name given for the menu is a named route
+          if options.blank? && route_options = (named_route(name) || named_route(name, parent))
+            options = route_options
           end
           
-          if !url && link_options.is_a?(Hash) && !link_options[:controller && ]Object.const_defined?("#{@id.classify}Controller")
-            options[:controller] = id
+          # 
+          if options.is_a?(Hash)
+            options[:action] = id unless options[:controller]
+            self.url_controller_path = options[:controller] ||= find_controller(options)
+            url = url_for(options)
+          else
+            url = options
           end
           
-          url || default_url
+          url
         end
         
-        def add_parent_options(options)
-          if @parent
-            options[:controller] ||= @parent.url_controller
-          end
-          
-          options
+        # Finds the most likely controller that this menu should link to, in
+        # order of:
+        # 1. The specified controller in the menu link options
+        # 2. The name of the menu (e.g. products = ProductsController)
+        # 3. The parent's controller
+        # 4. The request controller
+        def find_controller(options)
+          options[:controller] ||
+          Object.const_defined?("#{@id.classify}Controller") && "#{@id.classify}Controller".constantize.controller_path ||
+          @parent.url_controller_path ||
+          @request_controller.class.controller_path
         end
         
-        def default_url
-          @parent ? @parent.url : @request_controller.url
-        end
-        
+        # 
         def named_route(name, parent)
-          method_name = "#{name}_url"
-          method_name.insert("#{parent.id}_") if parent
+          name = "#{parent.id}_#{name}" if parent
+          method_name = "hash_for_#{name}_url"
           
           @request_controller.send(method_name) if @request_controller.respond_to?(method_name)
         end
