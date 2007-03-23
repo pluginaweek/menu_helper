@@ -14,23 +14,20 @@ module PluginAWeek #:nodoc:
         include ActionView::Helpers::TagHelper
         
         # 
-        attr_reader :menu_bar
-        
-        # 
         attr_reader :id
         
-        #
-        attr_reader :url
+        # 
+        attr_reader :url_options
         
         # 
-        attr_reader :url_controller_path
+        attr_reader :menu_bar
         
         delegate    :menu,
                       :to => :menu_bar
         delegate    :url_for,
-                    :link_to
+                    :link_to,
                     :current_page?,
-                      :to => :request_controller
+                      :to => :@request_controller
         
         def initialize(id, request_controller, parent = nil, *args) #:nodoc
           @id = id.to_s
@@ -40,10 +37,10 @@ module PluginAWeek #:nodoc:
           @content = args.first.is_a?(String) ? args.shift : @id.underscore.titleize
           
           # Build the url for the menu
-          url_options = args.shift || {}
-          if !url_options.include?(:auto_link)
-            @url = build_url(url_options)
-            @content = link_to(@content, @url)
+          @url_options = args.shift || {}
+          if auto_link?
+            url, @url_options = build_url(@url_options)
+            @content = link_to(@content, url)
           end
           
           # Build the html options
@@ -52,9 +49,13 @@ module PluginAWeek #:nodoc:
           @html_options.set_or_prepend(:class, @id)
           @html_options.set_or_append(:class, 'selected') if @url && current_page?(@url)
           
-          @menu_bar = MenuBar.new(controller)
+          @menu_bar = MenuBar.new(@request_controller, {}, {}, self)
           
           yield self if block_given?
+        end
+        
+        def auto_link?
+          !@url_options.include?(:auto_link)
         end
         
         # 
@@ -70,20 +71,19 @@ module PluginAWeek #:nodoc:
         # 
         def build_url(options = {})
           # Check if the name given for the menu is a named route
-          if options.blank? && route_options = (named_route(name) || named_route(name, parent))
+          if options.blank? && route_options = (named_route(@id) || named_route(@id, @parent))
             options = route_options
+          elsif options.is_a?(Hash)
+            options[:controller] ||= find_controller(options)
+            options[:action] ||= @id unless options[:controller] == @id
+            options.reverse_merge!(@parent.url_options) if @parent
+            
+            # Delete options that shouldn't be merged
+            options.delete(:use_route)
           end
           
-          # 
-          if options.is_a?(Hash)
-            options[:action] = id unless options[:controller]
-            self.url_controller_path = options[:controller] ||= find_controller(options)
-            url = url_for(options)
-          else
-            url = options
-          end
-          
-          url
+          url = options.is_a?(Hash) ? url_for(options) : options
+          return url, options
         end
         
         # Finds the most likely controller that this menu should link to, in
@@ -95,12 +95,12 @@ module PluginAWeek #:nodoc:
         def find_controller(options)
           options[:controller] ||
           Object.const_defined?("#{@id.classify}Controller") && "#{@id.classify}Controller".constantize.controller_path ||
-          @parent.url_controller_path ||
-          @request_controller.class.controller_path
+          @parent && @parent.url_options[:controller] ||
+          @request_controller.params[:controller]
         end
         
         # 
-        def named_route(name, parent)
+        def named_route(name, parent = nil)
           name = "#{parent.id}_#{name}" if parent
           method_name = "hash_for_#{name}_url"
           
@@ -146,7 +146,7 @@ module PluginAWeek #:nodoc:
         
         # 
         def build
-          html = @menus.inject('') do |menu, html|
+          html = @menus.inject('') do |html, menu|
             html << menu.build(@menus.last == menu)
           end
           
