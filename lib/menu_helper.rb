@@ -150,7 +150,7 @@ module PluginAWeek #:nodoc:
             html << menu.build(@menus.last == menu)
           end
           
-          content_tag('ul', html, @html_options)
+          html.blank? ? html : content_tag('ul', html, @html_options)
         end
       end
       
