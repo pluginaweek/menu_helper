@@ -46,8 +46,8 @@ module PluginAWeek #:nodoc:
           # Build the html options
           @html_options = args.shift || {}
           @html_options.symbolize_keys!
-          @html_options.set_or_prepend(:class, @id)
-          @html_options.set_or_append(:class, 'selected') if @url && current_page?(@url)
+          @html_options[:id] ||= @id
+          @html_options.set_or_append(:class, 'selected') if url && current_page?(url)
           
           @menu_bar = MenuBar.new(@request_controller, {}, {}, self)
           
