@@ -47,21 +47,27 @@ module PluginAWeek #:nodoc:
           @html_options = args.shift || {}
           @html_options.symbolize_keys!
           @html_options[:id] ||= @id
-          @html_options.set_or_append(:class, 'selected') if url && current_page?(url)
           
           @menu_bar = MenuBar.new(@request_controller, {}, {}, self)
           
           yield self if block_given?
         end
         
+        # 
         def auto_link?
           !@url_options.include?(:auto_link)
+        end
+        
+        # 
+        def selected?
+          current_page?(@url_options) || @menu_bar.menus.detect {|menu| menu.selected?}
         end
         
         # 
         def build(last = false)
           html = @content + @menu_bar.build
           html_options = @html_options.dup
+          html_options.set_or_append(:class, 'selected') if selected?
           html_options.set_or_append(:class, 'last') if last
           
           content_tag('li', html, html_options)
