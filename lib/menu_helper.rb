@@ -55,7 +55,7 @@ module PluginAWeek #:nodoc:
         
         # 
         def auto_link?
-          !@url_options.include?(:auto_link)
+          !@url_options.is_a?(Hash) || !@url_options.include?(:auto_link)
         end
         
         # 
