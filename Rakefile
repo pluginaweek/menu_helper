@@ -31,7 +31,7 @@ spec = Gem::Specification.new do |s|
   s.name            = PKG_NAME
   s.version         = PKG_VERSION
   s.platform        = Gem::Platform::RUBY
-  s.summary         = 'Adds a helper method for generating menus'
+  s.summary         = 'Adds a helper method for generating a menubar'
   
   s.files           = FileList['{lib,tasks,test}/**/*'].to_a + %w(init.rb MIT-LICENSE Rakefile README)
   s.require_path    = 'lib'

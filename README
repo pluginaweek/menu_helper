@@ -1,8 +1,12 @@
 = menu_helper
 
-menu_helper adds a helper method for generating menus.
+menu_helper adds a helper method for generating a menubar.
 
 == Resources
+
+API
+
+* http://api.pluginaweek.org/menu_helper
 
 Wiki
 
@@ -22,7 +26,83 @@ Development
 
 == Description
 
+The generation of a menubar's structure can often be a repetitive and unDRY
+process.  A standard using unordered lists is generally followed when creating
+a menubar.  menu_helper attempts to following this standard in addition to
+automatically adding ids, classes for selected menus, and default urls each
+menu is linked to (base on various information, such as the name of the menu).
 
+== Example
+
+routes.rb:
+  ActionController::Routing::Routes.draw do |map|
+    map.with_options(:controller => 'site') do |site|
+      site.home '', :action => 'index'
+    end
+    
+    map.with_options(:controller => 'about_us') do |about_us|
+      about_us.about_us     'about_us',             :action => 'index'
+      about_us.contact      'about_us/contact',     :action => 'contact'
+      about_us.who_we_are   'about_us/who_we_are',  :action => 'who_we_are'
+    end
+    
+    map.with_options(:controller => 'products') do |products|
+      products.products 'products', :action => 'index'
+    end
+    
+    map.with_options(:controller => 'services') do |services|
+      services.services 'services', :action => 'index'
+    end
+  end
+
+_menubar.rhtml:
+  <%=
+    menu_bar do |main|
+      main.menu :home
+      main.menu :products
+      main.menu :services
+      main.menu :about_us do |about_us|
+        about_us.menu :overview, 'Overview', about_us_url
+        about_us.menu :who_we_are
+        about_us.menu :contact, 'Contact Us'
+      end
+      main.menu :search, 'Search!', 'http://www.google.com', :class => 'ir'
+    end
+  %>
+
+Output (formatted for sanity):
+  <ul id="menubar">
+    <li id="home"><a href="http://example.com/">Home</a></li>
+    <li id="products"><a href="http://example.com/products">Products</a></li>
+    <li id="services"><a href="http://example.com/services">Services</a></li>
+    <li class="selected" id="about_us"><a href="http://example.com/about_us">About Us</a>
+      <ul id="about_us_menubar">
+        <li id="overview"><a href="http://example.com/about_us">Overview</a></li>
+        <li class="selected" id="who_we_are"><a href="http://example.com/about_us/who_we_are">Who We Are</a></li>
+        <li class="last" id="contact"><a href="http://example.com/about_us/contact">Contact Us</a></li>
+      </ul>
+    <li class="search ir" id="search"><a href="http://www.google.com">Search!</a></li>
+  </ul>
+
+== Using this plugin
+
+Remember one of the basic principles of programming: KISS.  There's no need to
+use this plugin if you're writing a very, very simple menubar.  The advantages
+of this helper are consistency, DRYness, and decreased complexity if you have
+lots of submenus.
+
+I wrote this plugin half as an experiment and half to actually use in a
+production application.  I recommend trying it out and seeing if it actually
+fits the needs of your application before committing to using it.
 
 == Testing
 
+This plugin requires that the plugin_test_helper gem be installed in order to
+run the unit tests.  To install this gem:
+
+  gem install plugin_test_helper
+
+== Dependencies
+
+This plugin depends on the presence of the following plugins:
+# set_or_append - http://wiki.pluginaweek.org/Set_or_append

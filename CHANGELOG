@@ -1,2 +1,15 @@
 *SVN*
 
+*0.0.1* (August 16th, 2007)
+
+* Add README documentation
+
+* Add api documentation
+
+* Add dependency on plugin_test_helper in order to simplify the test setup code
+
+* Remove MainMenuBar in favor of providing a default id for MenuBar
+
+* Refactor helper classes into individual files
+
+* Add unit tests

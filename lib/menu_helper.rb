@@ -1,171 +1,73 @@
-require 'set_or_append'
+require 'menu_helper/html_element'
+require 'menu_helper/menu_bar'
+require 'menu_helper/menu'
 
 module PluginAWeek #:nodoc:
   module Helpers #:nodoc:
-    # 
+    # Provides a builder for generating html menubars.  The structure of the
+    # menubars/menus is based on lists and should be styled using css. 
     module MenuHelper
+      # Creates a new 1st-level menu bar.  The first parameter is the menubar's
+      # configuration options.  The second parameter is the menubar's html
+      # options.  Both of these parameters are optional.
       # 
+      # Configuration options:
+      # * <tt>auto_set_id</tt> - Whether or not to automatically add ids to each menu.
+      # 
+      # Examples:
+      #   menu_bar {}, :id => 'menus', :class => 'pretty' do |main|
+      #     main.menu :home
+      #     main.menu :about_us do |about_us|
+      #       about_us.who_we_are
+      #       about_us.what_we_do
+      #       about_us.where_we_are
+      #       about_us.contact, 'Contact', 'mailto:contact@us.com'
+      #     end
+      #   end
+      #   #=>
+      #   <ul id="menus" class="pretty">
+      #     <li id="about_us">About Us
+      #       <ul id="about_us_menubar">
+      #         <li id="who_we_are"><a href="/about_us/who_we_are">Who We Are</a></li>
+      #         <li id="what_we_do"><a href="/about_us/what_we_do">What We Do</a></li>
+      #         <li id="contact"><a href="mailto:contact@us.com">Contact</a></li>
+      #       </ul>
+      #     </li>
+      #   </ul>
+      # 
+      # == Menu Selection
+      # 
+      # The currently selected menu is based on the current page that the user
+      # is currently on.  If the url that the menu links to is the same as the
+      # current page, then that menu will be selected.  This menu uses
+      # ActionView::Helpers::UrlHelper#current_page? to determine whether or not
+      # it is the currently selected menu.
+      # 
+      # If the menu that is selected is nested within another menu, then those
+      # menus will be selected as well.
+      # 
+      # A "selected" menu is indicated by an additional class html attribute
+      # that is added to the list item.
+      # 
+      # For example, if a submenu is selected, the html generated from the
+      # above full example would look like so:
+      # 
+      #   <ul id="menus" class="pretty">
+      #     <li id="about_us" class="selected">About Us
+      #       <ul id="about_us_menubar">
+      #         <li id="who_we_are" class="selected"><a href="/about_us/who_we_are">Who We Are</a></li>
+      #         <li id="what_we_do"><a href="/about_us/what_we_do">What We Do</a></li>
+      #         <li id="contact"><a href="mailto:contact@us.com">Contact</a></li>
+      #       </ul>
+      #     </li>
+      #   </ul>
+      # 
+      # == Menu Creation
+      # 
+      # For more information about how menus are created, see the documentation
+      # for MenuBar#menu.
       def menu_bar(*args, &block)
-        MainMenuBar.new(self, *args, &block)
-      end
-      
-      # 
-      class Menu
-        include ActionView::Helpers::TagHelper
-        
-        # 
-        attr_reader :id
-        
-        # 
-        attr_reader :url_options
-        
-        # 
-        attr_reader :menu_bar
-        
-        delegate    :menu,
-                      :to => :menu_bar
-        delegate    :url_for,
-                    :link_to,
-                    :current_page?,
-                      :to => :@request_controller
-        
-        def initialize(id, request_controller, parent = nil, *args) #:nodoc
-          @id = id.to_s
-          @request_controller = request_controller
-          @parent = parent
-          
-          @content = args.first.is_a?(String) ? args.shift : @id.underscore.titleize
-          
-          # Build the url for the menu
-          @url_options = args.shift || {}
-          if auto_link?
-            url, @url_options = build_url(@url_options)
-            @content = link_to(@content, url)
-          end
-          
-          # Build the html options
-          @html_options = args.shift || {}
-          @html_options.symbolize_keys!
-          @html_options[:id] ||= @id
-          
-          @menu_bar = MenuBar.new(@request_controller, {}, {}, self)
-          
-          yield self if block_given?
-        end
-        
-        # 
-        def auto_link?
-          !@url_options.is_a?(Hash) || !@url_options.include?(:auto_link)
-        end
-        
-        # 
-        def selected?
-          current_page?(@url_options) || @menu_bar.menus.detect {|menu| menu.selected?}
-        end
-        
-        # 
-        def build(last = false)
-          html = @content + @menu_bar.build
-          html_options = @html_options.dup
-          html_options.set_or_append(:class, 'selected') if selected?
-          html_options.set_or_append(:class, 'last') if last
-          
-          content_tag('li', html, html_options)
-        end
-        
-        private
-        # 
-        def build_url(options = {})
-          # Check if the name given for the menu is a named route
-          if options.blank? && route_options = (named_route(@id) || named_route(@id, @parent))
-            options = route_options
-          elsif options.is_a?(Hash)
-            options[:controller] ||= find_controller(options)
-            options[:action] ||= @id unless options[:controller] == @id
-            options.reverse_merge!(@parent.url_options) if @parent
-            
-            # Delete options that shouldn't be merged
-            options.delete(:use_route)
-          end
-          
-          url = options.is_a?(Hash) ? url_for(options) : options
-          return url, options
-        end
-        
-        # Finds the most likely controller that this menu should link to, in
-        # order of:
-        # 1. The specified controller in the menu link options
-        # 2. The name of the menu (e.g. products = ProductsController)
-        # 3. The parent's controller
-        # 4. The request controller
-        def find_controller(options)
-          options[:controller] ||
-          Object.const_defined?("#{@id.classify}Controller") && "#{@id.classify}Controller".constantize.controller_path ||
-          @parent && @parent.url_options[:controller] ||
-          @request_controller.params[:controller]
-        end
-        
-        # 
-        def named_route(name, parent = nil)
-          name = "#{parent.id}_#{name}" if parent
-          method_name = "hash_for_#{name}_url"
-          
-          @request_controller.send(method_name) if @request_controller.respond_to?(method_name)
-        end
-      end
-      
-      #   
-      class MenuBar
-        include ActionView::Helpers::TagHelper
-        
-        # 
-        attr_reader :menus
-        
-        # The collection of options to use in the menu bar's html
-        attr_reader :html_options
-        
-        delegate    :[],
-                    :[]=,
-                      :to => :html_options
-        
-        def initialize(request_controller, options = {}, html_options = {}, parent_menu = nil) #:nodoc:
-          options.assert_valid_keys(
-            :auto_set_ids
-          )
-          options.reverse_merge!(
-            :auto_set_ids => true
-          )
-          @options = options
-          @html_options = html_options
-          @request_controller = request_controller
-          @parent_menu = parent_menu
-          
-          @menus = []
-          
-          yield self if block_given?
-        end
-        
-        # 
-        def menu(id, *args, &block)
-          @menus << Menu.new(id, @request_controller, @parent_menu, *args, &block)
-        end
-        
-        # 
-        def build
-          html = @menus.inject('') do |html, menu|
-            html << menu.build(@menus.last == menu)
-          end
-          
-          html.blank? ? html : content_tag('ul', html, @html_options)
-        end
-      end
-      
-      class MainMenuBar < MenuBar
-        def initialize(*args)
-          super(*args)
-          
-          @html_options[:id] ||= 'menu_bar'
-        end
+        MenuBar.new(@controller, *args, &block).build
       end
     end
   end
