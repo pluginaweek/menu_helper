@@ -1,5 +1,7 @@
 *SVN*
 
+* Convert dos newlines to unix newlines
+
 * Fix too many :nodoc: tags so that rdocs are generated properly
 
 *0.0.1* (August 16th, 2007)
