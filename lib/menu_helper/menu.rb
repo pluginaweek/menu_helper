@@ -2,7 +2,7 @@ require 'set_or_append'
 
 module PluginAWeek #:nodoc:
   module Helpers #:nodoc:
-    module MenuHelper #:nodoc:
+    module MenuHelper
       # Represents a single menu within a menu bar
       class Menu < HtmlElement
         include ActionView::Helpers::UrlHelper

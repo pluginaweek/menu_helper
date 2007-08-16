@@ -1,6 +1,6 @@
 module PluginAWeek #:nodoc:
   module Helpers #:nodoc:
-    module MenuHelper #:nodoc:
+    module MenuHelper
       # Represents a group of menus.  A menu bar can either be the main menu
       # bar or a menu bar nested within a menu.
       class MenuBar < HtmlElement

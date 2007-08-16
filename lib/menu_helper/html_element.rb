@@ -1,6 +1,6 @@
 module PluginAWeek #:nodoc:
   module Helpers #:nodoc:
-    module MenuHelper #:nodoc:
+    module MenuHelper
       # Represents an HTML element
       # 
       # == Modifying HTML options
