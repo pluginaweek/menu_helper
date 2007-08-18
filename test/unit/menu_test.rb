@@ -123,9 +123,9 @@ class MenuTest < Test::Unit::TestCase
     assert_equal '<li class="selected" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.build
   end
   
-  def test_should_prepend_selected_class_if_class_attribute_already_exists
+  def test_should_append_selected_class_if_class_attribute_already_exists
     menu = create_menu(:contact, nil, {}, :class => 'pretty')
-    assert_equal '<li class="selected pretty" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.build
+    assert_equal '<li class="pretty selected" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.build
   end
   
   def test_should_include_last_class_in_html_if_last_menu
@@ -133,9 +133,9 @@ class MenuTest < Test::Unit::TestCase
     assert_equal '<li class="last" id="home"><a href="http://test.host/">Home</a></li>', menu.build(true)
   end
   
-  def test_should_prepend_last_class_if_class_attribute_already_exists
+  def test_should_append_last_class_if_class_attribute_already_exists
     menu = create_menu(:home, nil, {}, :class => 'pretty')
-    assert_equal '<li class="last pretty" id="home"><a href="http://test.host/">Home</a></li>', menu.build(true)
+    assert_equal '<li class="pretty last" id="home"><a href="http://test.host/">Home</a></li>', menu.build(true)
   end
   
   def test_should_not_modify_html_options_after_building_menu

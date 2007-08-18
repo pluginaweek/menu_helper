@@ -52,8 +52,8 @@ module PluginAWeek #:nodoc:
         def build(last = false)
           html = @content + @menu_bar.build
           html_options = @html_options.dup
-          html_options.set_or_prepend(:class, 'selected') if selected?
-          html_options.set_or_prepend(:class, 'last') if last
+          html_options.set_or_append(:class, 'selected') if selected?
+          html_options.set_or_append(:class, 'last') if last
           
           content_tag('li', html, html_options)
         end
