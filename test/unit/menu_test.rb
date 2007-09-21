@@ -154,9 +154,9 @@ class MenuTest < Test::Unit::TestCase
     expected = <<-eos
 <li class="selected" id="home"><a href="http://test.host/">Home</a>
   <ul id="home_menubar">
-    <li class="last selected" id="about_us"><a href="http://test.host/about_us">About Us</a>
+    <li class="selected last" id="about_us"><a href="http://test.host/about_us">About Us</a>
       <ul id="about_us_menubar">
-        <li class="last selected" id="contact"><a href="http://test.host/contact">Contact</a></li>
+        <li class="selected last" id="contact"><a href="http://test.host/contact">Contact</a></li>
       </ul>
     </li>
   </ul>

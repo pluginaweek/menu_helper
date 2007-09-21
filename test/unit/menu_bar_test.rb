@@ -47,7 +47,7 @@ class MenuBarTest < Test::Unit::TestCase
     expected = <<-eos
 <ul id="menubar">
   <li id="home"><a href="http://test.host/">Home</a></li>
-  <li class="last selected" id="contact"><a href="http://test.host/contact">Contact Us</a></li>
+  <li class="selected last" id="contact"><a href="http://test.host/contact">Contact Us</a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), menu_bar.build

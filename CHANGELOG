@@ -1,5 +1,7 @@
 *SVN*
 
+* Add gem dependency on set_or_append
+
 * Convert dos newlines to unix newlines
 
 * Fix too many :nodoc: tags so that rdocs are generated properly

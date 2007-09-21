@@ -1,6 +1,6 @@
 = menu_helper
 
-menu_helper adds a helper method for generating a menubar.
++menu_helper+ adds a helper method for generating a menubar.
 
 == Resources
 
@@ -14,7 +14,7 @@ Wiki
 
 Announcement
 
-* http://www.pluginaweek.org/
+* http://www.pluginaweek.org
 
 Source
 
@@ -32,7 +32,7 @@ a menubar.  menu_helper attempts to following this standard in addition to
 automatically adding ids, classes for selected menus, and default urls each
 menu is linked to (base on various information, such as the name of the menu).
 
-== Example
+== Usage
 
 routes.rb:
   ActionController::Routing::Routes.draw do |map|
@@ -84,7 +84,7 @@ Output (formatted for sanity):
     <li class="search ir" id="search"><a href="http://www.google.com">Search!</a></li>
   </ul>
 
-== Using this plugin
+=== Caveat Emptor
 
 Remember one of the basic principles of programming: KISS.  There's no need to
 use this plugin if you're writing a very, very simple menubar.  The advantages
@@ -97,12 +97,10 @@ fits the needs of your application before committing to using it.
 
 == Testing
 
-This plugin requires that the plugin_test_helper gem be installed in order to
-run the unit tests.  To install this gem:
-
-  gem install plugin_test_helper
+To test this plugin, the following gems must be installed:
+* plugin_test_helper[http://wiki.pluginaweek.org/Plugin_test_helper]
 
 == Dependencies
 
 This plugin depends on the presence of the following plugins:
-# set_or_append - http://wiki.pluginaweek.org/Set_or_append
+* set_or_append[http://wiki.pluginaweek.org/Set_or_append]
