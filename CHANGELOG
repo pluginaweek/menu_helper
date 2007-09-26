@@ -1,5 +1,7 @@
 *SVN*
 
+*0.0.2* (September 26th, 2007)
+
 * Add gem dependency on set_or_append
 
 * Convert dos newlines to unix newlines
