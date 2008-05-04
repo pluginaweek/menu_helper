@@ -1,38 +1,37 @@
 module PluginAWeek #:nodoc:
-  module Helpers #:nodoc:
-    module MenuHelper
-      # Represents an HTML element
-      # 
-      # == Modifying HTML options
-      # 
-      # HTML options can normally be specified when creating the element.
-      # However, if they need to be modified after the element has been created,
-      # you can access the properties like so:
-      # 
-      #   m = Menu.new
-      #   m[:style] = 'display: none;'
-      # 
-      # or for a menu bar:
-      # 
-      #   b = MenuBar.new
-      #   b[:style] = 'display: none;'
-      class HtmlElement
-        include ActionView::Helpers::TagHelper
-        
-        delegate    :[],
-                    :[]=,
-                      :to => '@html_options'
-        
-        def initialize(html_options = {}) #:nodoc:
-          @html_options = html_options.symbolize_keys
-        end
-        
-        # Generates the html representing this element
-        def html
-          content_tag(tag_name, content, @html_options)
-        end
-        
-        private
+  module MenuHelper
+    # Represents an HTML element
+    # 
+    # == Modifying HTML options
+    # 
+    # HTML options can normally be specified when creating the element.
+    # However, if they need to be modified after the element has been created,
+    # you can access the properties like so:
+    # 
+    #   m = Menu.new
+    #   m[:style] = 'display: none;'
+    # 
+    # or for a menu bar:
+    # 
+    #   b = MenuBar.new
+    #   b[:style] = 'display: none;'
+    class HtmlElement
+      include ActionView::Helpers::TagHelper
+      
+      delegate  :[],
+                :[]=,
+                  :to => '@html_options'
+      
+      def initialize(html_options = {}) #:nodoc:
+        @html_options = html_options.symbolize_keys
+      end
+      
+      # Generates the html representing this element
+      def html
+        content_tag(tag_name, content, @html_options)
+      end
+      
+      private
         # The name of the element tag to use (e.g. td, th, tr, etc.)
         def tag_name
           ''
@@ -42,7 +41,6 @@ module PluginAWeek #:nodoc:
         def content
           ''
         end
-      end
     end
   end
 end

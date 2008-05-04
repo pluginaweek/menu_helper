@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
 class MenuHelperTest < Test::Unit::TestCase
-  include PluginAWeek::Helpers::MenuHelper
+  include PluginAWeek::MenuHelper
   
   def test_should_build_menu_bar
     menu_bar_html = menu_bar({}, :class => 'pretty') do |main|

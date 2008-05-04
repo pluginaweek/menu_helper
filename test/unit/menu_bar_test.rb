@@ -1,23 +1,23 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
-class MenuBarTest < Test::Unit::TestCase
-  def test_should_raise_exception_if_invalid_option_specified
-    assert_raise(ArgumentError) {create_menu_bar(:invalid => true)}
+class MenuBarByDefaultTest < Test::Unit::TestCase
+  def setup
+    super
+    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
   end
   
   def test_should_have_no_menus_by_default
-    menu_bar = create_menu_bar
-    assert_equal [], menu_bar.menus
+    assert_equal [], @menu_bar.menus
   end
   
   def test_should_set_default_id_if_no_parent_specified
-    menu_bar = create_menu_bar
-    assert_equal 'menubar', menu_bar[:id]
+    assert_equal 'menubar', @menu_bar[:id]
   end
-  
-  def test_should_set_default_id_based_on_parent_if_parent_specified
-    menu_bar = create_menu_bar({}, {}, PluginAWeek::Helpers::MenuHelper::Menu.new(:home, @controller))
-    assert_equal 'home_menubar', menu_bar[:id]
+end
+
+class MenuBarTest < Test::Unit::TestCase
+  def test_should_raise_exception_if_invalid_option_specified
+    assert_raise(ArgumentError) {create_menu_bar(:invalid => true)}
   end
   
   def test_should_accept_block
@@ -50,11 +50,23 @@ class MenuBarTest < Test::Unit::TestCase
   <li class="selected last" id="contact"><a href="http://test.host/contact">Contact Us</a></li>
 </ul>
 eos
-    assert_equal expected.gsub(/\n\s*/, ''), menu_bar.build
+    assert_equal expected.gsub(/\n\s*/, ''), menu_bar.html
   end
   
   private
-  def create_menu_bar(*args, &block)
-    PluginAWeek::Helpers::MenuHelper::MenuBar.new(@controller, *args, &block)
+    def create_menu_bar(*args, &block)
+      PluginAWeek::MenuHelper::MenuBar.new(@controller, *args, &block)
+    end
+end
+
+class MenuBarWithParentTest < Test::Unit::TestCase
+  def setup
+    super
+    parent = PluginAWeek::MenuHelper::Menu.new(:home, @controller)
+    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, {}, {}, parent)
+  end
+  
+  def test_should_set_default_id_based_on_parent
+    assert_equal 'home_menubar', @menu_bar[:id]
   end
 end

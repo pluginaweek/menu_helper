@@ -1,19 +1,24 @@
 require File.dirname(__FILE__) + '/../test_helper'
 
+class MenuByDefaultTest < Test::Unit::TestCase
+  def setup
+    super
+    @menu = PluginAWeek::MenuHelper::Menu.new(:home, @controller)
+  end
+  
+  def test_should_use_humanized_id_for_content
+    assert_equal '<li id="home"><a href="http://test.host/">Home</a></li>', @menu.html
+  end
+  
+  def test_should_set_html_id_to_id
+    assert_equal 'home', @menu[:id]
+  end
+end
+
 class MenuTest < Test::Unit::TestCase
-  def test_default_content_should_be_humanized_id
-    menu = create_menu(:home)
-    assert_equal '<li id="home"><a href="http://test.host/">Home</a></li>', menu.build
-  end
-  
-  def test_default_html_id_should_be_id
-    menu = create_menu(:home)
-    assert_equal 'home', menu[:id]
-  end
-  
   def test_should_not_linkify_if_not_auto_linking
     menu = create_menu(:home, nil, :auto_link => false)
-    assert_equal '<li id="home">Home</li>', menu.build
+    assert_equal '<li id="home">Home</li>', menu.html
   end
   
   def test_default_menubar_id_should_use_menu_id
@@ -120,27 +125,27 @@ class MenuTest < Test::Unit::TestCase
   
   def test_should_include_selected_class_in_html_if_selected
     menu = create_menu(:contact)
-    assert_equal '<li class="selected" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.build
+    assert_equal '<li class="selected" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.html
   end
   
   def test_should_append_selected_class_if_class_attribute_already_exists
     menu = create_menu(:contact, nil, {}, :class => 'pretty')
-    assert_equal '<li class="pretty selected" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.build
+    assert_equal '<li class="pretty selected" id="contact"><a href="http://test.host/contact">Contact</a></li>', menu.html
   end
   
   def test_should_include_last_class_in_html_if_last_menu
     menu = create_menu(:home)
-    assert_equal '<li class="last" id="home"><a href="http://test.host/">Home</a></li>', menu.build(true)
+    assert_equal '<li class="last" id="home"><a href="http://test.host/">Home</a></li>', menu.html(true)
   end
   
   def test_should_append_last_class_if_class_attribute_already_exists
     menu = create_menu(:home, nil, {}, :class => 'pretty')
-    assert_equal '<li class="pretty last" id="home"><a href="http://test.host/">Home</a></li>', menu.build(true)
+    assert_equal '<li class="pretty last" id="home"><a href="http://test.host/">Home</a></li>', menu.html(true)
   end
   
   def test_should_not_modify_html_options_after_building_menu
     menu = create_menu(:home)
-    menu.build
+    menu.html
     assert_nil menu[:class]
   end
   
@@ -162,11 +167,11 @@ class MenuTest < Test::Unit::TestCase
   </ul>
 </li>
 eos
-    assert_equal expected.gsub(/\n\s*/, ''), menu.build
+    assert_equal expected.gsub(/\n\s*/, ''), menu.html
   end
   
   private
-  def create_menu(id, parent = nil, *args, &block)
-    PluginAWeek::Helpers::MenuHelper::Menu.new(id, @controller, parent, *args, &block)
-  end
+    def create_menu(id, parent = nil, *args, &block)
+      PluginAWeek::MenuHelper::Menu.new(id, @controller, parent, *args, &block)
+    end
 end

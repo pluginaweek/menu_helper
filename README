@@ -4,10 +4,6 @@
 
 == Resources
 
-Announcement
-
-* http://www.pluginaweek.org
-
 Wiki
 
 * http://wiki.pluginaweek.org/Menu_helper
@@ -91,9 +87,8 @@ use this plugin if you're writing a very, very simple menubar.  The advantages
 of this helper are consistency, DRYness, and decreased complexity if you have
 lots of submenus.
 
-I wrote this plugin half as an experiment and half to actually use in a
-production application.  I recommend trying it out and seeing if it actually
-fits the needs of your application before committing to using it.
+I wrote this plugin mostly as an educational/experimental piece, so I don't using
+this in a production application, but rather a prototype.
 
 == Testing
 
@@ -102,5 +97,4 @@ To test this plugin, the following gems must be installed:
 
 == Dependencies
 
-This plugin depends on the presence of the following plugins:
 * set_or_append[http://wiki.pluginaweek.org/Set_or_append]
