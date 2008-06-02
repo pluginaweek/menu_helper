@@ -4,7 +4,7 @@ require 'rake/gempackagetask'
 require 'rake/contrib/sshpublisher'
 
 PKG_NAME           = 'menu_helper'
-PKG_VERSION        = '0.0.3'
+PKG_VERSION        = '0.0.4'
 PKG_FILE_NAME      = "#{PKG_NAME}-#{PKG_VERSION}"
 RUBY_FORGE_PROJECT = 'pluginaweek'
 
@@ -68,7 +68,7 @@ desc 'Publish the release files to RubyForge.'
 task :release => [:gem, :package] do
   require 'rubyforge'
   
-  ruby_forge = RubyForge.new
+  ruby_forge = RubyForge.new.configure
   ruby_forge.login
   
   %w( gem tgz zip ).each do |ext|
