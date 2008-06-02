@@ -1,5 +1,3 @@
-$:.unshift("#{File.dirname(__FILE__)}/../../set_or_append/lib")
-
 # Load the plugin testing framework
 $:.unshift("#{File.dirname(__FILE__)}/../../plugin_test_helper/lib")
 require 'rubygems'

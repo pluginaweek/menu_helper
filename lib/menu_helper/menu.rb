@@ -1,5 +1,3 @@
-require 'set_or_append'
-
 module PluginAWeek #:nodoc:
   module MenuHelper
     # Represents a single menu within a menu bar
@@ -50,8 +48,8 @@ module PluginAWeek #:nodoc:
       # Builds the actual html of the menu
       def html(last = false)
         html_options = @html_options.dup
-        html_options.set_or_append(:class, 'selected') if selected?
-        html_options.set_or_append(:class, 'last') if last
+        html_options[:class] = (html_options[:class].to_s + ' selected').strip if selected?
+        html_options[:class] = (html_options[:class].to_s + ' last').strip if last
         
         content_tag(tag_name, content, html_options)
       end
