@@ -1,5 +1,9 @@
 *SVN*
 
+*0.0.5* (June 22nd, 2008)
+
+* Remove log files from gems
+
 *0.0.4* (June 1st, 2008)
 
 * Remove dependency on set_or_append
