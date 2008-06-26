@@ -4,21 +4,21 @@
 
 == Resources
 
-Wiki
-
-* http://wiki.pluginaweek.org/Menu_helper
-
 API
 
 * http://api.pluginaweek.org/menu_helper
 
+Bugs
+
+* http://pluginaweek.lighthouseapp.com/projects/13280-menu_helper
+
 Development
 
-* http://dev.pluginaweek.org/browser/trunk/plugins/action_pack/menu_helper
+* http://github.com/pluginaweek/menu_helper
 
 Source
 
-* http://svn.pluginaweek.org/trunk/plugins/action_pack/menu_helper
+* git://github.com/pluginaweek/menu_helper.git
 
 == Description
 
@@ -93,7 +93,7 @@ this in a production application, but rather a prototype.
 == Testing
 
 To test this plugin, the following gems must be installed:
-* plugin_test_helper[http://wiki.pluginaweek.org/Plugin_test_helper]
+* plugin_test_helper[http://github.com/pluginaweek/plugin_test_helper]
 
 To run against a specific version of Rails:
 
