@@ -1,35 +1,28 @@
-*SVN*
+== master
 
-*0.0.5* (June 22nd, 2008)
+== 0.0.5 / 2008-06-22
 
 * Remove log files from gems
 
-*0.0.4* (June 1st, 2008)
+== 0.0.4 / 2008-06-01
 
 * Remove dependency on set_or_append
 
-*0.0.3* (May 5th, 2008)
+== 0.0.3 / 2008-05-05
 
 * Updated documentation
 
-*0.0.2* (September 26th, 2007)
+== 0.0.2 / 2007-09-26
 
 * Add gem dependency on set_or_append
-
 * Convert dos newlines to unix newlines
-
 * Fix too many :nodoc: tags so that rdocs are generated properly
 
-*0.0.1* (August 16th, 2007)
+== 0.0.1 / 2007-08-16
 
 * Add README documentation
-
 * Add api documentation
-
 * Add dependency on plugin_test_helper in order to simplify the test setup code
-
 * Remove MainMenuBar in favor of providing a default id for MenuBar
-
 * Refactor helper classes into individual files
-
 * Add unit tests
