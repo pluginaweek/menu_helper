@@ -20,11 +20,13 @@ module PluginAWeek #:nodoc:
         @parent = parent
         @content = args.first.is_a?(String) ? args.shift : id.underscore.titleize
         @url_options = args.shift || {}
+        
         super(args.shift || {})
         
         # Set the default html options
         @html_options[:id] ||= id
         
+        # Create the menubar for sub-menus in case any are generated
         @menu_bar = MenuBar.new(@request_controller, {}, {:id => "#{self[:id]}_menubar"}, self)
         
         # Build the url for the menu

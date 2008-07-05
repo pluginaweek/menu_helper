@@ -55,10 +55,8 @@ module PluginAWeek #:nodoc:
       # 
       # Example menubar:
       #   menu :home do |home|
-      #     menu :about_us
-      #       #=> Links to about_us_url
-      #     menu :search
-      #       #=> Links to home_search_url
+      #     home.menu :about_us   # => Links to about_us_url
+      #     home.menu :search     # => Links to home_search_url
       #   end
       # 
       # == URLs with url_for
@@ -77,14 +75,14 @@ module PluginAWeek #:nodoc:
       # 
       # Examples:
       #   menu :home do |home|
-      #     menu :about, 'About Us', :action => 'about_us'
-      #       #=> Links to {:controller => 'home', :action => 'about_us'}
-      #     menu :who_we_are
-      #       #=> Links to {:controller => 'home', :action => 'who_we_are'}
-      #     menu :contact_us, 'Contact Us', :controller => 'contact', :action => 'index'
-      #       #=> Links to {:controller => 'contact', :action => 'index'}
-      #     menu :search
-      #       #=> Links to {:controller => 'search'}
+      #     home.menu :about, 'About Us', :action => 'about_us'
+      #       # => Links to {:controller => 'home', :action => 'about_us'}
+      #     home.menu :who_we_are
+      #       # => Links to {:controller => 'home', :action => 'who_we_are'}
+      #     home.menu :contact_us, 'Contact Us', :controller => 'contact', :action => 'index'
+      #       # => Links to {:controller => 'contact', :action => 'index'}
+      #     home.menu :search
+      #       # => Links to {:controller => 'search'}
       #   end
       # 
       # You can also link to an explicit URL like so:
@@ -101,14 +99,10 @@ module PluginAWeek #:nodoc:
       # version of the menu's id.  Examples of menus which customize the
       # content and/or html attributes are below:
       # 
-      #   menu :contact
-      #     #=> <li id="contact"><a href="/contact">Contact</a></li>
-      #   menu :contact, 'Contact Us'
-      #     #=> <li id="contact"><a href="/contact">Contact Us</a></li>
-      #   menu :contact, :class => 'pretty'
-      #     #=> <li id="contact" class="pretty"><a href="/contact">Contact</a></li>
-      #   menu :contact, 'Contact Us', :class => 'pretty'
-      #     #=> <li id="contact" class="pretty"><a href="/contact">Contact Us</a></li>
+      #   home.menu :contact                                    # => <li id="contact"><a href="/contact">Contact</a></li>
+      #   home.menu :contact, 'Contact Us'                      # => <li id="contact"><a href="/contact">Contact Us</a></li>
+      #   home.menu :contact, :class => 'pretty'                # => <li id="contact" class="pretty"><a href="/contact">Contact</a></li>
+      #   home.menu :contact, 'Contact Us', :class => 'pretty'  # => <li id="contact" class="pretty"><a href="/contact">Contact Us</a></li>
       # 
       # == Submenus
       # 
@@ -116,7 +110,7 @@ module PluginAWeek #:nodoc:
       # create submenus in the same manner that the main menus are created.
       # For example,
       # 
-      #   menu :about do |about|
+      #   home.menu :about do |about|
       #     about.menu :who_we_are
       #     about.menu :contact_us
       #   end
