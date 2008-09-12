@@ -87,8 +87,8 @@ use this plugin if you're writing a very, very simple menubar.  The advantages
 of this helper are consistency, DRYness, and decreased complexity if you have
 lots of submenus.
 
-I wrote this plugin mostly as an educational/experimental piece, so I don't using
-this in a production application, but rather a prototype.
+I wrote this plugin mostly as an educational/experimental piece, so I don't
+recommend using this in a production application, but rather a prototype.
 
 == Testing
 
