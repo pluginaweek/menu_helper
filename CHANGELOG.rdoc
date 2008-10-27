@@ -1,5 +1,7 @@
 == master
 
+== 0.1.0 / 2008-10-26
+
 * Update tests to use ActionView::TestCase
 * Embed menu content within a span element for better style control
 * Rename :auto_link option to :link
