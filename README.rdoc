@@ -37,21 +37,16 @@ routes.rb:
     end
     
     map.with_options(:controller => 'about_us') do |about_us|
-      about_us.about_us     'about_us',             :action => 'index'
-      about_us.contact      'about_us/contact',     :action => 'contact'
-      about_us.who_we_are   'about_us/who_we_are',  :action => 'who_we_are'
+      about_us.about_us 'about_us', :action => 'index'
+      about_us.contact 'about_us/contact', :action => 'contact'
+      about_us.who_we_are 'about_us/who_we_are', :action => 'who_we_are'
     end
     
-    map.with_options(:controller => 'products') do |products|
-      products.products 'products', :action => 'index'
-    end
-    
-    map.with_options(:controller => 'services') do |services|
-      services.services 'services', :action => 'index'
-    end
+    map.resources :products
+    map.resources :services
   end
 
-_menubar.rhtml:
+_menu_bar.html.erb:
   <%=
     menu_bar do |main|
       main.menu :home
@@ -67,17 +62,18 @@ _menubar.rhtml:
   %>
 
 Output (formatted for sanity):
-  <ul id="menubar">
-    <li id="home"><a href="http://example.com/">Home</a></li>
-    <li id="products"><a href="http://example.com/products">Products</a></li>
-    <li id="services"><a href="http://example.com/services">Services</a></li>
-    <li class="selected" id="about_us"><a href="http://example.com/about_us">About Us</a>
-      <ul id="about_us_menubar">
-        <li id="overview"><a href="http://example.com/about_us">Overview</a></li>
-        <li class="selected" id="who_we_are"><a href="http://example.com/about_us/who_we_are">Who We Are</a></li>
-        <li class="last" id="contact"><a href="http://example.com/about_us/contact">Contact Us</a></li>
+  <ul class="menubar menubar-1">
+    <li><a href="http://example.com/"><span>Home</span></a></li>
+    <li><a href="http://example.com/products"><span>Products</span></a></li>
+    <li><a href="http://example.com/services"><span>Services</span></a></li>
+    <li class="menubar-selected"><a href="http://example.com/about_us"><span>About Us</span></a>
+      <ul class="menubar menubar-2 menubar-selected">
+        <li><a href="http://example.com/about_us"><span>Overview</span></a></li>
+        <li class="menubar-selected"><a href="http://example.com/about_us/who_we_are"><span>Who We Are</span></a></li>
+        <li class="menubar-last"><a href="http://example.com/about_us/contact"><span>Contact Us</span></a></li>
       </ul>
-    <li class="search ir" id="search"><a href="http://www.google.com">Search!</a></li>
+    </li>
+    <li class="ir menubar-last"><a href="http://www.google.com"><span>Search!</span></a></li>
   </ul>
 
 === Caveat Emptor

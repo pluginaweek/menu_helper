@@ -4,66 +4,107 @@ module PluginAWeek #:nodoc:
     class Menu < HtmlElement
       include ActionView::Helpers::UrlHelper
       
-      # The url where this menu is linked to
+      # The css class to apply when a menu is selected
+      cattr_accessor :selected_class
+      @@selected_class = 'menubar-selected'
+      
+      # The css class for the last menu in the menu bar
+      cattr_accessor :last_class
+      @@last_class = 'menubar-last'
+      
+      # The unique name assigned to this menu
+      attr_reader :name
+      
+      # The url where this menu is linked to.  This can either be a hash of
+      # url options or a string representing the actual url
       attr_reader :url_options
       
-      # If there are submenus under this menu, they are stored in here
-      attr_reader :menu_bar
+      # The menu bar in which this menu exists
+      attr_reader :parent_menu_bar
       
-      # Allow submenus to be created
-      delegate    :menu,
-                    :to => :menu_bar
+      # Add shortcuts to the menu bar configuration
+      delegate  :request_controller,
+                :parent_menu,
+                :auto_set_ids?,
+                :attach_active_submenus?,
+                  :to => :parent_menu_bar
       
-      def initialize(id, request_controller, parent = nil, *args) #:nodoc
-        id = id.to_s
-        @controller = @request_controller = request_controller
-        @parent = parent
-        @content = args.first.is_a?(String) ? args.shift : id.underscore.titleize
-        @url_options = args.shift || {}
-        
-        super(args.shift || {})
-        
-        # Set the default html options
-        @html_options[:id] ||= id
-        
-        # Create the menubar for sub-menus in case any are generated
-        @menu_bar = MenuBar.new(@request_controller, {}, {:id => "#{self[:id]}_menubar"}, self)
-        
-        # Build the url for the menu
-        url, @url_options = build_url(@url_options)
-        @content = link_to(@content, url) if auto_link?
-        
-        yield self if block_given?
-      end
+      # Add ability to add menus *after* creation
+      delegate  :menu,
+                  :to => '@menu_bar'
       
-      # Should we try to automatically generate the link?
-      def auto_link?
-        !@url_options.is_a?(Hash) || !@url_options.include?(:auto_link) || @url_options[:auto_link]
+      def initialize(parent_menu_bar, name, content = nil, url_options = {}, html_options = {}) #:nodoc
+        # Allow the content parameter to be skipped
+        content, url_options, html_options = nil, content, url_options if content.is_a?(Hash)
+        
+        # Remove non-html options that are specific to this element and shouldn't
+        # be rendered as an html attribute
+        @options = html_options.slice(:link)
+        html_options.except!(:link)
+        
+        super(html_options)
+        
+        @parent_menu_bar = parent_menu_bar
+        @name = name.to_s
+        
+        # Set context of the menu for url generation
+        @controller = request_controller
+        
+        # Generate the text-based content of the menu
+        @content = content_tag(:span, content || @name.underscore.titleize)
+        
+        # Set up url
+        url, @url_options = build_url(url_options)
+        @content = link_to(@content, url) if @options[:link] != false
+        
+        # Set up default html options
+        id_prefix = parent_menu_bar[:id] || parent_menu && parent_menu[:id]
+        self[:id] ||= "#{id_prefix}-#{@name}" if auto_set_ids? && id_prefix
+        
+        # Create the menu bar for sub-menus in case any are generated.  Use the
+        # same configuration as the parent menu bar.
+        @menu_bar = MenuBar.new(request_controller, parent_menu_bar.options.merge(:parent_menu => self))
+        
+        yield @menu_bar if block_given?
       end
       
       # Is this menu selected?  A menu is considered selected if it or any of
-      # its submenus are selected
+      # its sub-menus are selected
       def selected?
-        current_page?(@url_options) || @menu_bar.menus.any? {|menu| menu.selected?}
+        current_page?(url_options) || @menu_bar.selected?
       end
       
       # Builds the actual html of the menu
       def html(last = false)
         html_options = @html_options.dup
-        html_options[:class] = (html_options[:class].to_s + ' selected').strip if selected?
-        html_options[:class] = (html_options[:class].to_s + ' last').strip if last
+        html_options[:class] = "#{html_options[:class]} #{selected_class}".strip if selected?
+        html_options[:class] = "#{html_options[:class]} #{last_class}".strip if last
         
         content_tag(tag_name, content, html_options)
       end
       
       private
+        # List item
         def tag_name
           'li'
         end
         
+        # Generate the html for the menu
         def content
           content = @content
-          content << @menu_bar.html if @menu_bar.menus.any?
+          
+          if @menu_bar.menus.any?
+            # sub-menus have been defined: render markup
+            html = @menu_bar.html
+            
+            if attach_active_submenus? || !selected?
+              content << html
+            else
+              # sub-menu bar will be generated elsewhere
+              request_controller.instance_variable_set(@menu_bar.content_for_variable, html)
+            end
+          end
+          
           content
         end
         
@@ -71,11 +112,11 @@ module PluginAWeek #:nodoc:
         # the menu
         def build_url(options = {})
           # Check if the name given for the menu is a named route
-          if options.blank? && route_options = (named_route(self[:id], @parent) || named_route(self[:id]))
+          if options.blank? && route_options = (named_route(name) || named_route(name, false))
             options = route_options
           elsif options.is_a?(Hash)
             options[:controller] ||= find_controller(options)
-            options[:action] ||= self[:id] unless options[:controller] == self[:id]
+            options[:action] ||= name unless options[:controller] == name
             options[:only_path] ||= false
           end
           
@@ -83,25 +124,24 @@ module PluginAWeek #:nodoc:
           return url, options
         end
         
-        # Finds the most likely controller that this menu should link to, in
-        # order of:
-        # 1. The specified controller in the menu link options
-        # 2. The name of the menu (e.g. products = ProductsController)
-        # 3. The parent's controller
-        # 4. The request controller
+        # Finds the most likely controller that this menu should link to
         def find_controller(options)
+          # 1. Specified controller in the menu link options
           options[:controller] ||
-          (begin; "#{self[:id].camelize}Controller".constantize.controller_path; rescue; nil; end) ||
-          @parent && @parent.url_options[:controller] ||
-          @request_controller.params[:controller]
+          # 2. The name of the menu (e.g. products = ProductsController)
+          (begin; "#{name.camelize}Controller".constantize.controller_path; rescue; end) ||
+          # 3. The parent's controller
+          parent_menu && parent_menu.url_options[:controller] ||
+          # 4. The request controller
+          request_controller.class.controller_path
         end
         
         # Finds the named route that is being linked to (if that route exists)
-        def named_route(name, parent = nil)
-          name = "#{parent[:id]}_#{name}" if parent
+        def named_route(name, include_parent = true)
+          name = "#{parent_menu.name}_#{name}" if parent_menu && include_parent
           method_name = "hash_for_#{name}_url"
           
-          @request_controller.send(method_name) if @request_controller.respond_to?(method_name)
+          request_controller.send(method_name) if request_controller.respond_to?(method_name)
         end
     end
   end

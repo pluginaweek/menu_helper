@@ -1,5 +1,15 @@
 == master
 
+* Update tests to use ActionView::TestCase
+* Embed menu content within a span element for better style control
+* Rename :auto_link option to :link
+* Add ability to render active submenus on a different part of the page for better layout control
+* Add ability to turn off automatically setting html ids for menus
+* Allow default class names to be configured on a per-application basis
+* Change id/class css naming conventions to following something more similar to jQuery UI
+* Require that the menu content always be defined (even if it's just nil) if the url isn't a hash
+* Use consistent API for internals
+
 == 0.0.5 / 2008-06-22
 
 * Remove log files from gems
