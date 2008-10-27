@@ -30,12 +30,12 @@ module PluginAWeek #:nodoc:
     # ...generates the following html if +about_us+ is selected...
     # 
     #   <ul id="nav" class="pretty menubar menubar-1">
-    #     <li id="nav-home"><a href="/">Home</a></home>
-    #     <li id="nav-about_us" class="menubar-selected"><a href="/about_us">About Us</a>
+    #     <li id="nav-home"><a href="/"><span>Home</span></a></li>
+    #     <li id="nav-about_us" class="menubar-selected"><a href="/about_us"><span>About Us</span></a>
     #       <ul class="menubar menubar-2" class="menubar-selected">
-    #         <li id="nav-about_us-who_we_are"><a href="/about_us/who_we_are">Who We Are</a></li>
-    #         <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do">What We Do</a></li>
-    #         <li id="nav-about_us-contact"><a href="mailto:contact@us.com">Contact</a></li>
+    #         <li id="nav-about_us-who_we_are"><a href="/about_us/who_we_are"><span>Who We Are</span></a></li>
+    #         <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do"><span>What We Do</span></a></li>
+    #         <li id="nav-about_us-contact"><a href="mailto:contact@us.com"><span>Contact</span></a></li>
     #       </ul>
     #     </li>
     #   </ul>
@@ -59,15 +59,15 @@ module PluginAWeek #:nodoc:
     # ...generates the following html if +about_us+ is selected...
     # 
     #   <ul id="nav" class="menubar menubar-1">
-    #     <li id="nav-home"><a href="/">Home</a></home>
-    #     <li id="nav-about_us" class="menubar-selected"><a href="/about_us">About Us</a></li>
+    #     <li id="nav-home"><a href="/"><span>Home</span></a></li>
+    #     <li id="nav-about_us" class="menubar-selected"><a href="/about_us"><span>About Us</span></a></li>
     #   </ul>
     #   
     #   <div id="subnav">
     #     <ul class="menubar menubar-2 menubar-selected">
-    #       <li id="nav-about_us-who_we_are"><a href="/about_us/who_we_are">Who We Are</a></li>
-    #       <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do">What We Do</a></li>
-    #       <li id="nav-about_us-contact"><a href="mailto:contact@us.com">Contact</a></li>
+    #       <li id="nav-about_us-who_we_are"><a href="/about_us/who_we_are"><span>Who We Are</span></a></li>
+    #       <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do"><span>What We Do</span></a></li>
+    #       <li id="nav-about_us-contact"><a href="mailto:contact@us.com"><span>Contact</span></a></li>
     #     </ul>
     #   </div>
     # 
@@ -89,12 +89,12 @@ module PluginAWeek #:nodoc:
     # generated from the above full example would look like so:
     # 
     #   <ul id="nav" class="pretty menubar menubar-1">
-    #     <li id="nav-home"><a href="/">Home</a></home>
-    #     <li id="nav-about_us" class="menubar-selected">About Us
+    #     <li id="nav-home"><a href="/"><span>Home</span></a></li>
+    #     <li id="nav-about_us" class="menubar-selected"><span>About Us</span>
     #       <ul class="menubar menubar-2 menubar-selected">
-    #         <li id="nav-about_us-who_we_are" class="menubar-selected"><a href="/about_us/who_we_are">Who We Are</a></li>
-    #         <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do">What We Do</a></li>
-    #         <li id="nav-about_us-contact"><a href="mailto:contact@us.com">Contact</a></li>
+    #         <li id="nav-about_us-who_we_are" class="menubar-selected"><a href="/about_us/who_we_are"><span>Who We Are</span></a></li>
+    #         <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do"><span>What We Do</span></a></li>
+    #         <li id="nav-about_us-contact"><a href="mailto:contact@us.com"><span>Contact</span></a></li>
     #       </ul>
     #     </li>
     #   </ul>
