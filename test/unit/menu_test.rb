@@ -4,8 +4,8 @@ class MenuByDefaultTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_have_a_name
@@ -45,13 +45,13 @@ class MenuTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_accept_a_block
     in_block = false
-    menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home) do |menu|
+    menu = MenuHelper::Menu.new(@menu_bar, :home) do |menu|
       in_block = true
     end
     
@@ -68,12 +68,12 @@ class MenuTest < Test::Unit::TestCase
   end
   
   def test_should_allow_last_class_to_be_customized
-    @original_last_class = PluginAWeek::MenuHelper::Menu.last_class
-    PluginAWeek::MenuHelper::Menu.last_class = 'menubar-end'
+    @original_last_class = MenuHelper::Menu.last_class
+    MenuHelper::Menu.last_class = 'menubar-end'
     
     assert_equal '<li class="menubar-end"><a href="http://test.host/home"><span>Home</span></a></li>', @menu.html(true)
   ensure
-    PluginAWeek::MenuHelper::Menu.last_class = @original_last_class
+    MenuHelper::Menu.last_class = @original_last_class
   end
   
   def test_should_not_modify_html_options_after_building_html
@@ -90,8 +90,8 @@ class MenuWithMatchingNamedRouteTest < Test::Unit::TestCase
       map.home '', :controller => 'home', :action => 'index'
     end
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_build_url_from_named_route
@@ -104,8 +104,8 @@ class MenuWithMatchingControllerTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_use_name_as_controller
@@ -118,8 +118,8 @@ class MenuWithoutMatchingNamedRouteOrControllerTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :investors)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :investors)
   end
   
   def test_should_use_request_controller_as_controller_and_name_as_action
@@ -132,23 +132,23 @@ class MenuWithCustomUrlOptionsTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
   end
   
   def test_should_use_custom_controller_if_specified
-    menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :privacy_policy, :controller => 'home')
+    menu = MenuHelper::Menu.new(@menu_bar, :privacy_policy, :controller => 'home')
     expected = {:controller => 'home', :action => 'privacy_policy', :only_path => false}
     assert_equal expected, menu.url_options
   end
   
   def test_should_not_use_name_as_action_if_same_as_controller_name
-    menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :about_us, :controller => 'about_us')
+    menu = MenuHelper::Menu.new(@menu_bar, :about_us, :controller => 'about_us')
     expected = {:controller => 'about_us', :only_path => false}
     assert_equal expected, menu.url_options
   end
   
   def test_should_use_custom_action_if_specified
-    menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :privacy_policy, :controller => 'home', :action => 'privacy')
+    menu = MenuHelper::Menu.new(@menu_bar, :privacy_policy, :controller => 'home', :action => 'privacy')
     expected = {:controller => 'home', :action => 'privacy', :only_path => false}
     assert_equal expected, menu.url_options
   end
@@ -158,8 +158,8 @@ class MenuWithSpecificUrlTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :search, 'Search', 'http://www.google.com')
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :search, 'Search', 'http://www.google.com')
   end
   
   def test_should_use_exact_url
@@ -171,8 +171,8 @@ class MenuWithMenubarId < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, {}, :id => 'menus')
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller, {}, :id => 'menus')
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_prefix_menu_id_with_menu_bar_id
@@ -184,8 +184,8 @@ class MenuWithoutContentTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_use_titleized_version_of_name_as_content
@@ -197,8 +197,8 @@ class MenuWithCustomContentTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home, 'My Home')
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home, 'My Home')
   end
   
   def test_should_use_custom_content_as_content
@@ -210,8 +210,8 @@ class MenuWithoutLinkingTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home, {}, :link => false)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home, {}, :link => false)
   end
   
   def test_should_not_linkify_html
@@ -223,8 +223,8 @@ class MenuWithoutAutoIdSettingTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, {:auto_set_ids => false}, :id => 'menus')
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller, {:auto_set_ids => false}, :id => 'menus')
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_not_set_default_id
@@ -236,8 +236,8 @@ class MenuWhenNotCurrentPageTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_not_be_selected
@@ -253,8 +253,8 @@ class MenuWhenCurrentPageTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :contact)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :contact)
   end
   
   def test_should_be_selected
@@ -271,11 +271,11 @@ class MenuWhenCurrentPageTest < Test::Unit::TestCase
   end
   
   def test_should_allow_selected_class_to_be_customized
-    @original_selected_class = PluginAWeek::MenuHelper::Menu.selected_class
-    PluginAWeek::MenuHelper::Menu.selected_class = 'menubar-active'
+    @original_selected_class = MenuHelper::Menu.selected_class
+    MenuHelper::Menu.selected_class = 'menubar-active'
     assert_equal '<li class="menubar-active"><a href="http://test.host/contact"><span>Contact</span></a></li>', @menu.html
   ensure
-    PluginAWeek::MenuHelper::Menu.selected_class = @original_selected_class
+    MenuHelper::Menu.selected_class = @original_selected_class
   end
 end
 
@@ -283,8 +283,8 @@ class MenuWithoutSubmenusTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home)
   end
   
   def test_should_not_render_a_menu_bar
@@ -296,8 +296,8 @@ class MenuWithSubmenusTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home) do |home|
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home) do |home|
       home.menu :about_us do |about_us|
         about_us.menu :who_we_are
       end
@@ -324,8 +324,8 @@ class MenuUnselectedWithDetachedActiveSubmenusTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :home) do |home|
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false)
+    @menu = MenuHelper::Menu.new(@menu_bar, :home) do |home|
       home.menu :about_us
     end
   end
@@ -350,8 +350,8 @@ class MenuSelectedWithDetachedActiveSubmenusTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :contact) do |contact|
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false)
+    @menu = MenuHelper::Menu.new(@menu_bar, :contact) do |contact|
       contact.menu :investors
     end
   end
@@ -377,8 +377,8 @@ class MenuWithSubmenuAsCurrentPageTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :about_us) do |about_us|
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @menu = MenuHelper::Menu.new(@menu_bar, :about_us) do |about_us|
       about_us.menu :contact
     end
   end
@@ -403,8 +403,8 @@ class MenuWithParentMenuTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @parent_menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :contact, {}, :id => 'contact')
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @parent_menu = MenuHelper::Menu.new(@menu_bar, :contact, {}, :id => 'contact')
     @menu = @parent_menu.menu :investors
   end
   
@@ -426,8 +426,8 @@ class MenuWithParentMenuAndMatchingNamedRouteTest < Test::Unit::TestCase
       map.connect ':controller/:action/:id'
     end
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @parent_menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :contact)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @parent_menu = MenuHelper::Menu.new(@menu_bar, :contact)
     @menu = @parent_menu.menu :investors
   end
   
@@ -441,8 +441,8 @@ class MenuWithParentMenuAndMatchingControllerTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @parent_menu = PluginAWeek::MenuHelper::Menu.new(@menu_bar, :contact)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
+    @parent_menu = MenuHelper::Menu.new(@menu_bar, :contact)
     @menu = @parent_menu.menu :investors
   end
   

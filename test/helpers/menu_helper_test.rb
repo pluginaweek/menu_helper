@@ -1,7 +1,7 @@
 require File.expand_path(File.dirname(__FILE__) + '/../test_helper')
 
 class MenuHelperTest < ActionView::TestCase
-  tests PluginAWeek::MenuHelper
+  tests MenuHelper
   
   def test_should_build_menu_bar
     menu_bar_html = menu_bar({}, :class => 'pretty') do |main|

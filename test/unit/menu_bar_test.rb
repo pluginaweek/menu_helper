@@ -4,7 +4,7 @@ class MenuBarByDefaultTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
   end
   
   def test_should_have_no_menus
@@ -53,13 +53,13 @@ class MenuBarByDefaultTest < Test::Unit::TestCase
   end
   
   def test_should_allow_css_classes_to_be_customized
-    @original_menu_bar_class = PluginAWeek::MenuHelper::MenuBar.menu_bar_class
-    PluginAWeek::MenuHelper::MenuBar.menu_bar_class = 'menus'
+    @original_menu_bar_class = MenuHelper::MenuBar.menu_bar_class
+    MenuHelper::MenuBar.menu_bar_class = 'menus'
     
-    menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
+    menu_bar = MenuHelper::MenuBar.new(@controller)
     assert_equal 'menus menus-1', menu_bar[:class]
   ensure
-    PluginAWeek::MenuHelper::MenuBar.menu_bar_class = @original_menu_bar_class
+    MenuHelper::MenuBar.menu_bar_class = @original_menu_bar_class
   end
   
   def test_should_not_set_id
@@ -71,16 +71,16 @@ class MenuBarTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
   end
   
   def test_should_raise_exception_if_invalid_option_specified
-    assert_raise(ArgumentError) {PluginAWeek::MenuHelper::MenuBar.new(@controller, :invalid => true)}
+    assert_raise(ArgumentError) {MenuHelper::MenuBar.new(@controller, :invalid => true)}
   end
   
   def test_should_accept_block
     in_block = false
-    menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller) do |menu_bar|
+    menu_bar = MenuHelper::MenuBar.new(@controller) do |menu_bar|
       in_block = true
     end
     
@@ -106,7 +106,7 @@ class MenuBarWithoutMenusTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
+    @menu_bar = MenuHelper::MenuBar.new(@controller)
   end
   
   def test_should_not_have_any_menus
@@ -126,7 +126,7 @@ class MenuBarWithCustomHtmlOptionsTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, {}, :id => 'menus', :class => 'pretty')
+    @menu_bar = MenuHelper::MenuBar.new(@controller, {}, :id => 'menus', :class => 'pretty')
   end
   
   def test_should_render_with_custom_options
@@ -138,7 +138,7 @@ class MenuBarWithCustomContentForTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :content_for => 'menus')
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :content_for => 'menus')
   end
   
   def test_should_have_a_content_for_variable_based_on_options
@@ -150,7 +150,7 @@ class MenuBarWithMenusTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, {}, :id => 'menus') do |main|
+    @menu_bar = MenuHelper::MenuBar.new(@controller, {}, :id => 'menus') do |main|
       main.menu :home
       main.menu :about_us, 'About'
     end
@@ -171,7 +171,7 @@ class MenuBarWithSelectedMenuTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller) do |main|
+    @menu_bar = MenuHelper::MenuBar.new(@controller) do |main|
       main.menu :contact
     end
   end
@@ -194,7 +194,7 @@ class MenuBarWithoutAutoIdSettingTest < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, {:auto_set_ids => false}, :id => 'menus') do |main|
+    @menu_bar = MenuHelper::MenuBar.new(@controller, {:auto_set_ids => false}, :id => 'menus') do |main|
       main.menu :home
     end
   end
@@ -213,7 +213,7 @@ class MenuBarUnselectedWithDetachedActiveSubmenus < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false) do |main|
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false) do |main|
       main.menu :home do |home|
         home.menu :about_us
       end
@@ -242,7 +242,7 @@ class MenuBarSelectedWithDetachedActiveSubmenus < Test::Unit::TestCase
   def setup
     super
     
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false) do |main|
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :attach_active_submenus => false) do |main|
       main.menu :contact do |contact|
         contact.menu :investors
       end
@@ -275,9 +275,9 @@ class MenuBarWithParentMenuTest < Test::Unit::TestCase
   def setup
     super
     
-    @parent_menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @parent_menu = PluginAWeek::MenuHelper::Menu.new(@parent_menu_bar, :home) 
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :parent_menu => @parent_menu)
+    @parent_menu_bar = MenuHelper::MenuBar.new(@controller)
+    @parent_menu = MenuHelper::Menu.new(@parent_menu_bar, :home) 
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :parent_menu => @parent_menu)
   end
   
   def test_should_have_a_parent_menu
@@ -293,9 +293,9 @@ class MenuBarWithParentMenuAndSelectedMenuTest < Test::Unit::TestCase
   def setup
     super
     
-    @parent_menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller)
-    @parent_menu = PluginAWeek::MenuHelper::Menu.new(@parent_menu_bar, :about_us) 
-    @menu_bar = PluginAWeek::MenuHelper::MenuBar.new(@controller, :parent_menu => @parent_menu) do |about_us|
+    @parent_menu_bar = MenuHelper::MenuBar.new(@controller)
+    @parent_menu = MenuHelper::Menu.new(@parent_menu_bar, :about_us) 
+    @menu_bar = MenuHelper::MenuBar.new(@controller, :parent_menu => @parent_menu) do |about_us|
       about_us.menu :contact
     end
   end
