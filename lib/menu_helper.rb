@@ -10,9 +10,13 @@ module MenuHelper
   # optional.
   # 
   # Configuration options:
-  # * +auto_set_ids+ - Whether or not to automatically add ids to each menu/menu bar.  Default is true.
-  # * +attach_active_submenus+ - Whether any active sub-menu bar should be rendered as part of its parent menu.  Default is true.
-  # * +content_for+ - The base block name to use when detaching active submenus.  Default is "menu_bar".  For example, this will render sub-menu bars to menu_bar_level_2
+  # * <tt>:auto_set_ids</tt> - Whether or not to automatically add ids to each
+  #   menu/menu bar.  Default is true.
+  # * <tt>:attach_active_submenus</tt> - Whether any active sub-menu bar should
+  #   be rendered as part of its parent menu.  Default is true.
+  # * <tt>:content_for</tt> - The base block name to use when detaching active
+  #   submenus.  Default is "menu_bar".  For example, this will render
+  #   sub-menu bars to menu_bar_level_2.
   # 
   # == Examples
   # 
