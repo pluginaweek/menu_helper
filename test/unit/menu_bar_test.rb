@@ -49,15 +49,15 @@ class MenuBarByDefaultTest < Test::Unit::TestCase
   end
   
   def test_should_set_css_classes
-    assert_equal 'menubar menubar-1', @menu_bar[:class]
+    assert_equal 'ui-menubar ui-menubar-1', @menu_bar[:class]
   end
   
   def test_should_allow_css_classes_to_be_customized
     @original_menu_bar_class = MenuHelper::MenuBar.menu_bar_class
-    MenuHelper::MenuBar.menu_bar_class = 'menus'
+    MenuHelper::MenuBar.menu_bar_class = 'ui-menus'
     
     menu_bar = MenuHelper::MenuBar.new(@controller)
-    assert_equal 'menus menus-1', menu_bar[:class]
+    assert_equal 'ui-menus ui-menus-1', menu_bar[:class]
   ensure
     MenuHelper::MenuBar.menu_bar_class = @original_menu_bar_class
   end
@@ -89,7 +89,7 @@ class MenuBarTest < Test::Unit::TestCase
   
   def test_should_not_modify_html_options_after_building_hml
     @menu_bar.html
-    assert_equal 'menubar menubar-1', @menu_bar[:class]
+    assert_equal 'ui-menubar ui-menubar-1', @menu_bar[:class]
   end
   
   def test_should_allow_menus_to_be_created
@@ -118,7 +118,7 @@ class MenuBarWithoutMenusTest < Test::Unit::TestCase
   end
   
   def test_should_not_render_menus
-    assert_equal '<ul class="menubar menubar-1"></ul>', @menu_bar.html
+    assert_equal '<ul class="ui-menubar ui-menubar-1"></ul>', @menu_bar.html
   end
 end
 
@@ -130,7 +130,7 @@ class MenuBarWithCustomHtmlOptionsTest < Test::Unit::TestCase
   end
   
   def test_should_render_with_custom_options
-    assert_equal '<ul class="pretty menubar menubar-1" id="menus"></ul>', @menu_bar.html
+    assert_equal '<ul class="pretty ui-menubar ui-menubar-1" id="menus"></ul>', @menu_bar.html
   end
 end
 
@@ -158,9 +158,9 @@ class MenuBarWithMenusTest < Test::Unit::TestCase
   
   def test_should_render_menus
     expected = <<-eos
-<ul class="menubar menubar-1" id="menus">
-  <li id="menus-home"><a href="http://test.host/home"><span>Home</span></a></li>
-  <li class="menubar-last" id="menus-about_us"><a href="http://test.host/about_us"><span>About</span></a></li>
+<ul class="ui-menubar ui-menubar-1" id="menus">
+  <li class="ui-menubar-menu ui-menubar-menu-1" id="menus-home"><a href="http://test.host/home"><span>Home</span></a></li>
+  <li class="ui-menubar-menu ui-menubar-menu-1 ui-menubar-last" id="menus-about_us"><a href="http://test.host/about_us"><span>About</span></a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), @menu_bar.html
@@ -182,8 +182,8 @@ class MenuBarWithSelectedMenuTest < Test::Unit::TestCase
   
   def test_should_not_include_selected_css_class_in_html
     expected = <<-eos
-<ul class="menubar menubar-1">
-  <li class="menubar-selected menubar-last"><a href="http://test.host/contact"><span>Contact</span></a></li>
+<ul class="ui-menubar ui-menubar-1">
+  <li class="ui-menubar-menu ui-menubar-menu-1 ui-state-active ui-menubar-selected ui-menubar-last"><a href="http://test.host/contact"><span>Contact</span></a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), @menu_bar.html
@@ -201,8 +201,8 @@ class MenuBarWithoutAutoIdSettingTest < Test::Unit::TestCase
   
   def test_should_not_set_default_id_for_menus
     expected = <<-eos
-<ul class="menubar menubar-1" id="menus">
-  <li class="menubar-last"><a href="http://test.host/home"><span>Home</span></a></li>
+<ul class="ui-menubar ui-menubar-1" id="menus">
+  <li class="ui-menubar-menu ui-menubar-menu-1 ui-menubar-last"><a href="http://test.host/home"><span>Home</span></a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), @menu_bar.html
@@ -222,10 +222,10 @@ class MenuBarUnselectedWithDetachedActiveSubmenus < Test::Unit::TestCase
   
   def test_should_render_sub_menu_bars
     expected = <<-eos
-<ul class="menubar menubar-1">
-  <li class="menubar-last"><a href="http://test.host/home"><span>Home</span></a>
-    <ul class="menubar menubar-2">
-      <li class="menubar-last"><a href="http://test.host/about_us"><span>About Us</span></a></li>
+<ul class="ui-menubar ui-menubar-1">
+  <li class="ui-menubar-menu ui-menubar-menu-1 ui-menubar-last"><a href="http://test.host/home"><span>Home</span></a>
+    <ul class="ui-menubar ui-menubar-2">
+      <li class="ui-menubar-menu ui-menubar-menu-2 ui-menubar-last"><a href="http://test.host/about_us"><span>About Us</span></a></li>
     </ul>
   </li>
 </ul>
@@ -251,8 +251,8 @@ class MenuBarSelectedWithDetachedActiveSubmenus < Test::Unit::TestCase
   
   def test_should_not_render_sub_menu_bars
     expected = <<-eos
-<ul class="menubar menubar-1">
-  <li class="menubar-selected menubar-last"><a href="http://test.host/contact"><span>Contact</span></a></li>
+<ul class="ui-menubar ui-menubar-1">
+  <li class="ui-menubar-menu ui-menubar-menu-1 ui-state-active ui-menubar-selected ui-menubar-last"><a href="http://test.host/contact"><span>Contact</span></a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), @menu_bar.html
@@ -263,8 +263,8 @@ eos
     @menu_bar.html
     
     expected = <<-eos
-<ul class="menubar menubar-2">
-  <li class="menubar-last"><a href="http://test.host/contact/investors"><span>Investors</span></a></li>
+<ul class="ui-menubar ui-menubar-2">
+  <li class="ui-menubar-menu ui-menubar-menu-2 ui-menubar-last"><a href="http://test.host/contact/investors"><span>Investors</span></a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), @controller.instance_variable_get('@content_for_menu_bar_level_2')
@@ -306,8 +306,8 @@ class MenuBarWithParentMenuAndSelectedMenuTest < Test::Unit::TestCase
   
   def test_should_include_selected_css_class_in_html
     expected = <<-eos
-<ul class="menubar menubar-2 menubar-selected">
-  <li class="menubar-selected menubar-last"><a href="http://test.host/contact"><span>Contact</span></a></li>
+<ul class="ui-menubar ui-menubar-2 ui-state-active ui-menubar-selected">
+  <li class="ui-menubar-menu ui-menubar-menu-2 ui-state-active ui-menubar-selected ui-menubar-last"><a href="http://test.host/contact"><span>Contact</span></a></li>
 </ul>
 eos
     assert_equal expected.gsub(/\n\s*/, ''), @menu_bar.html

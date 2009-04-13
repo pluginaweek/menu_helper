@@ -3,13 +3,17 @@ module MenuHelper
   class Menu < HtmlElement
     include ActionView::Helpers::UrlHelper
     
+    # The css class to apply for each menu
+    cattr_accessor :menu_class
+    @@menu_class = 'ui-menubar-menu'
+    
     # The css class to apply when a menu is selected
     cattr_accessor :selected_class
-    @@selected_class = 'menubar-selected'
+    @@selected_class = 'ui-state-active ui-menubar-selected'
     
     # The css class for the last menu in the menu bar
     cattr_accessor :last_class
-    @@last_class = 'menubar-last'
+    @@last_class = 'ui-menubar-last'
     
     # The unique name assigned to this menu
     attr_reader :name
@@ -24,6 +28,7 @@ module MenuHelper
     # Add shortcuts to the menu bar configuration
     delegate  :request_controller,
               :parent_menu,
+              :level,
               :auto_set_ids?,
               :attach_active_submenus?,
                 :to => :parent_menu_bar
@@ -59,6 +64,7 @@ module MenuHelper
       # Set up default html options
       id_prefix = parent_menu_bar[:id] || parent_menu && parent_menu[:id]
       self[:id] ||= "#{id_prefix}-#{@name}" if auto_set_ids? && id_prefix
+      self[:class] = "#{self[:class]} #{menu_class} #{menu_class}-#{level}".strip
       
       # Create the menu bar for sub-menus in case any are generated.  Use the
       # same configuration as the parent menu bar.

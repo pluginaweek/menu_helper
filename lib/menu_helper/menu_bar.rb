@@ -4,11 +4,11 @@ module MenuHelper
   class MenuBar < HtmlElement
     # The css class to apply for all menu bars
     cattr_accessor :menu_bar_class
-    @@menu_bar_class = 'menubar'
+    @@menu_bar_class = 'ui-menubar'
     
     # The css class to apply when a sub-menu bar is selected
     cattr_accessor :selected_class
-    @@selected_class = 'menubar-selected'
+    @@selected_class = 'ui-state-active ui-menubar-selected'
     
     # The request context in which this menu bar is being rendered
     attr_reader :request_controller
@@ -159,10 +159,10 @@ module MenuHelper
     # version of the menu's id.  Examples of menus which customize the
     # content and/or html attributes are below:
     # 
-    #   home.menu :contact                                          # => <li id="contact"><a href="/contact">Contact</a></li>
-    #   home.menu :contact, 'Contact Us'                            # => <li id="contact"><a href="/contact">Contact Us</a></li>
-    #   home.menu :contact, {}, :class => 'pretty'                  # => <li id="contact" class="pretty"><a href="/contact">Contact</a></li>
-    #   home.menu :contact, 'Get in touch!', {}, :class => 'pretty' # => <li id="contact" class="pretty"><a href="/contact">Contact Us</a></li>
+    #   home.menu :contact                                          # => <li id="contact" class="ui-menubar-menu ui-menubar-menu-1"><a href="/contact">Contact</a></li>
+    #   home.menu :contact, 'Contact Us'                            # => <li id="contact" class="ui-menubar-menu ui-menubar-menu-1"><a href="/contact">Contact Us</a></li>
+    #   home.menu :contact, {}, :class => 'pretty'                  # => <li id="contact" class="pretty ui-menubar-menu ui-menubar-menu-1"><a href="/contact">Contact</a></li>
+    #   home.menu :contact, 'Get in touch!', {}, :class => 'pretty' # => <li id="contact" class="pretty ui-menubar-menu ui-menubar-menu-1"><a href="/contact">Get in touch!</a></li>
     # 
     # == Sub-menus
     # 

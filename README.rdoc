@@ -62,18 +62,18 @@ _menu_bar.html.erb:
   %>
 
 Output (formatted for sanity):
-  <ul class="menubar menubar-1">
-    <li><a href="http://example.com/"><span>Home</span></a></li>
-    <li><a href="http://example.com/products"><span>Products</span></a></li>
-    <li><a href="http://example.com/services"><span>Services</span></a></li>
-    <li class="menubar-selected"><a href="http://example.com/about_us"><span>About Us</span></a>
-      <ul class="menubar menubar-2 menubar-selected">
-        <li><a href="http://example.com/about_us"><span>Overview</span></a></li>
-        <li class="menubar-selected"><a href="http://example.com/about_us/who_we_are"><span>Who We Are</span></a></li>
-        <li class="menubar-last"><a href="http://example.com/about_us/contact"><span>Contact Us</span></a></li>
+  <ul class="ui-menubar ui-menubar-1">
+    <li class="ui-menubar-menu ui-menubar-menu-1"><a href="http://example.com/"><span>Home</span></a></li>
+    <li class="ui-menubar-menu ui-menubar-menu-1"><a href="http://example.com/products"><span>Products</span></a></li>
+    <li class="ui-menubar-menu ui-menubar-menu-1"><a href="http://example.com/services"><span>Services</span></a></li>
+    <li class="ui-menubar-menu ui-menubar-menu-1 ui-state-active ui-menubar-selected"><a href="http://example.com/about_us"><span>About Us</span></a>
+      <ul class="ui-menubar ui-menubar-2 ui-state-active ui-menubar-selected">
+        <li class="ui-menubar-menu ui-menubar-menu-2"><a href="http://example.com/about_us"><span>Overview</span></a></li>
+        <li class="ui-menubar-menu ui-menubar-menu-2 ui-state-active ui-menubar-selected"><a href="http://example.com/about_us/who_we_are"><span>Who We Are</span></a></li>
+        <li class="ui-menubar-menu ui-menubar-menu-2 ui-menubar-last"><a href="http://example.com/about_us/contact"><span>Contact Us</span></a></li>
       </ul>
     </li>
-    <li class="ir menubar-last"><a href="http://www.google.com"><span>Search!</span></a></li>
+    <li class="ir ui-menubar-menu ui-menubar-menu-1 ui-menubar-last"><a href="http://www.google.com"><span>Search!</span></a></li>
   </ul>
 
 === Caveat Emptor

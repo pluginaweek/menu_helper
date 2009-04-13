@@ -32,13 +32,13 @@ module MenuHelper
   # 
   # ...generates the following html if +about_us+ is selected...
   # 
-  #   <ul id="nav" class="pretty menubar menubar-1">
-  #     <li id="nav-home"><a href="/"><span>Home</span></a></li>
-  #     <li id="nav-about_us" class="menubar-selected"><a href="/about_us"><span>About Us</span></a>
-  #       <ul class="menubar menubar-2" class="menubar-selected">
-  #         <li id="nav-about_us-who_we_are"><a href="/about_us/who_we_are"><span>Who We Are</span></a></li>
-  #         <li id="nav-about_us-what_we_do"><a href="/about_us/what_we_do"><span>What We Do</span></a></li>
-  #         <li id="nav-about_us-contact"><a href="mailto:contact@us.com"><span>Contact</span></a></li>
+  #   <ul id="nav" class="pretty ui-menubar ui-menubar-1">
+  #     <li id="nav-home" class="ui-menubar-menu ui-menubar-menu-1"><a href="/"><span>Home</span></a></li>
+  #     <li id="nav-about_us" class="ui-menubar-menu ui-menubar-menu-1 ui-state-active ui-menubar-selected"><a href="/about_us"><span>About Us</span></a>
+  #       <ul class="ui-menubar ui-menubar-2 ui-state-active ui-menubar-selected">
+  #         <li id="nav-about_us-who_we_are" class="ui-menubar-menu ui-menubar-menu-2"><a href="/about_us/who_we_are"><span>Who We Are</span></a></li>
+  #         <li id="nav-about_us-what_we_do" class="ui-menubar-menu ui-menubar-menu-2"><a href="/about_us/what_we_do"><span>What We Do</span></a></li>
+  #         <li id="nav-about_us-contact" class="ui-menubar-menu ui-menubar-menu-2"><a href="mailto:contact@us.com"><span>Contact</span></a></li>
   #       </ul>
   #     </li>
   #   </ul>

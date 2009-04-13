@@ -1,5 +1,8 @@
 == master
 
+* Add ui-state-active and level-specific menu css classes
+* Change class css naming conventions to follow the new jQuery UI guidelines
+
 == 0.2.0 / 2008-12-14
 
 * Remove the PluginAWeek namespace
