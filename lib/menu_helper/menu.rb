@@ -26,16 +26,12 @@ module MenuHelper
     attr_reader :parent_menu_bar
     
     # Add shortcuts to the menu bar configuration
-    delegate  :request_controller,
-              :parent_menu,
-              :level,
-              :auto_set_ids?,
+    delegate  :request_controller, :parent_menu, :level, :auto_set_ids?,
               :attach_active_submenus?,
                 :to => :parent_menu_bar
     
     # Add ability to add menus *after* creation
-    delegate  :menu,
-                :to => '@menu_bar'
+    delegate  :menu, :to => '@menu_bar'
     
     def initialize(parent_menu_bar, name, content = nil, url_options = {}, html_options = {}) #:nodoc
       # Allow the content parameter to be skipped
