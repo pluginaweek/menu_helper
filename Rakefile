@@ -7,7 +7,8 @@ spec = Gem::Specification.new do |s|
   s.name              = 'menu_helper'
   s.version           = '0.3.0'
   s.platform          = Gem::Platform::RUBY
-  s.summary           = 'Adds a helper method for generating a menubar'
+  s.summary           = 'Adds a helper method for generating a menubar in Rails'
+  s.description       = s.summary
   
   s.files             = FileList['{lib,test}/**/*'] + %w(CHANGELOG.rdoc init.rb LICENSE Rakefile README.rdoc) - FileList['test/app_root/{log,log/*,script,script/*}']
   s.require_path      = 'lib'
