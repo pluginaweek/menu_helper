@@ -6,7 +6,7 @@
 
 API
 
-* http://rdoc.info/projects/pluginaweek/menu_helper
+* http://rdoc.info/github/pluginaweek/menu_helper/master/frames
 
 Bugs
 
