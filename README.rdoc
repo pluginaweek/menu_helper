@@ -10,7 +10,7 @@ API
 
 Bugs
 
-* http://pluginaweek.lighthouseapp.com/projects/13280-menu_helper
+* http://github.com/pluginaweek/menu_helper/issues
 
 Development
 
