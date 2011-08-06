@@ -1,4 +1,4 @@
-= menu_helper
+= menu_helper http://travis-ci.org/pluginaweek/menu_helper.png
 
 +menu_helper+ adds a helper method for generating a menubar.
 
@@ -15,6 +15,10 @@ Bugs
 Development
 
 * http://github.com/pluginaweek/menu_helper
+
+Testing
+
+* http://travis-ci.org/pluginaweek/menu_helper
 
 Source
 
