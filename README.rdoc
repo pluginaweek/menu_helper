@@ -20,6 +20,10 @@ Source
 
 * git://github.com/pluginaweek/menu_helper.git
 
+Mailing List
+
+* http://groups.google.com/group/pluginaweek-talk
+
 == Description
 
 The generation of a menubar's structure can often be a repetitive and unDRY
